@@ -1,13 +1,44 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import dummyData from "../dummyDate";
+import Data from "../data/Date";
 import Card from "./Card";
+import { v4 as uuidv4} from 'uuid';
+import { Add,NameAdd } from "./Add";
 
 const Main = () => {
-  const [data, setData] = useState(dummyData);
+  const [data, setData] = useState(Data);
+
+  const AddTask = (taskTitle:string) => {
+      const newSection = {
+        id: uuidv4(),
+        title: taskTitle,
+        names: [],
+      };
+      setData([...data, newSection]);
+    };
+
+    const AddName = (newName: string) => {
+      const newMember = {
+        id: uuidv4(),
+        name: newName,
+      };
+      
+      const newData = data.map(section => ({
+        ...section,
+        names: section.names.map(name => ({ ...name }))
+      }));
+
+      const defaultNameIndex = newData[0].names.findIndex(name => name.name === '名前を追加してください');
+      if (defaultNameIndex !== -1) {
+        newData[0].names[defaultNameIndex] = newMember;
+      } else {
+        newData[0].names.push(newMember);
+      }
+      setData(newData)
+    }
 
   const onDragEnd = (result: any) => {
-    // console.log(result);
+
     if (!result.destination) return;
     const { source, destination } = result;
 
@@ -28,12 +59,12 @@ const Main = () => {
       //動かし始めたタスクに属していたカラムの中のタスクを全て取得
       //後でsplice関数でその動かし始めたタスクを削除するため
       //sourceTaskに配列をコピーしておく(破壊操作を後でするため)
-      const sourceTask = [...sourseCol.tasks];
+      const sourceTask = [...sourseCol.names];
       console.log(sourceTask);
 
       //動かし終わったタスクに属していたカラムの中のタスクを全て取得
       //後でsplice関数でその動かし始めたタスクを追加するため
-      const destinationTask = [...destinationCol.tasks];
+      const destinationTask = [...destinationCol.names];
       console.log(destinationTask);
 
       //前のカラムから削除
@@ -41,8 +72,8 @@ const Main = () => {
       //後のカラムに追加
       destinationTask.splice(destination.index, 0, removed);
 
-      data[sourceColIndex].tasks = sourceTask;
-      data[destinationColIndex].tasks = destinationTask;
+      data[sourceColIndex].names = sourceTask;
+      data[destinationColIndex].names = destinationTask;
 
       setData(data);
     } else {
@@ -50,18 +81,25 @@ const Main = () => {
       const sourceColIndex = data.findIndex((e) => e.id === source.droppableId);
       const sourseCol = data[sourceColIndex];
       console.log(sourseCol);
-      const sourceTask = [...sourseCol.tasks];
+      const sourceTask = [...sourseCol.names];
       console.log(sourceTask);
       const [removed] = sourceTask.splice(source.index, 1);
       sourceTask.splice(destination.index, 0, removed);
 
-      data[sourceColIndex].tasks = sourceTask;
+      data[sourceColIndex].names = sourceTask;
 
       setData(data);
     }
   };
 
+
   return (
+    <>
+    <div className="form-container">
+    <NameAdd AddName={AddName}/>
+    <Add AddTask={AddTask} />
+    </div>
+      
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="trello">
         {data.map((section) => (
@@ -74,11 +112,11 @@ const Main = () => {
               >
                 <div className="trello-section-title">{section.title}</div>
                 <div className="trello-section-content">
-                  {section.tasks.map((task, index) => (
+                  {section.names.map((name, index) => (
                     // <Card key={task.id}>{task.title}</Card>
                     <Draggable
-                      key={task.id}
-                      draggableId={task.id}
+                      key={name.id}
+                      draggableId={name.id}
                       index={index}
                     >
                       {(provided, snapshot) => (
@@ -91,7 +129,7 @@ const Main = () => {
                             opacity: snapshot.isDragging ? "0.5" : "1",
                           }}
                         >
-                          <Card>{task.title}</Card>
+                          <Card>{name.name}</Card>
                         </div>
                       )}
                     </Draggable>
@@ -104,6 +142,7 @@ const Main = () => {
         ))}
       </div>
     </DragDropContext>
+    </>
   );
 };
 
