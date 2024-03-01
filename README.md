@@ -1,4 +1,4 @@
-<a href="https://drag-zeta.vercel.app/">
+<a href="https://drag-zeta.vercel.app/"></a>
 
 場所決め君
 
