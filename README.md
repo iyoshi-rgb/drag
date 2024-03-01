@@ -1,6 +1,6 @@
-<a href="https://drag-zeta.vercel.app/"></a>
+<a href="https://drag-zeta.vercel.app/">App Link</a>
 
-場所決め君
+<h2>場所決め</h2>
 
 <img width="960" alt="スクリーンショット 2024-03-01 202412" src="https://github.com/iyoshi-rgb/drag/assets/153269464/40ef4c4e-33f3-420b-8569-bab46a549eee">
 
@@ -9,6 +9,10 @@
 ドラッグ&ドロップ機能には、react beautiful dnd を使用しました。
 
 使用技術：
-・typescript
-・react
-・react beautiful dnd
+
+<ul>
+<li>typescript</li>
+<li>react</li>
+<li>react beautiful dnd</li>
+<li>vercel</li>
+</ul>
