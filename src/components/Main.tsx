@@ -28,7 +28,7 @@ const Main = () => {
         names: section.names.map(name => ({ ...name }))
       }));
 
-      const defaultNameIndex = newData[0].names.findIndex(name => name.name === '名前を追加してください');
+      const defaultNameIndex = newData[0].names.findIndex(name => name.name === 'Memberを追加してください');
       if (defaultNameIndex !== -1) {
         newData[0].names[defaultNameIndex] = newMember;
       } else {

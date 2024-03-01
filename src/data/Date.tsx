@@ -7,7 +7,7 @@ const Data = [
     names: [
       {
         id: uuidv4(),
-        name: '名前を追加してください'
+        name: 'Memberを追加してください'
       },
     ],
   },
